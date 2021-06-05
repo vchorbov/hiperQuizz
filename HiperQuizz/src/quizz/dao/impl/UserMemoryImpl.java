@@ -4,7 +4,7 @@ import quizz.dao.KeyGenerator;
 import quizz.dao.UserRepository;
 import quizz.model.User;
 
-public class UserMemoryImpl extends RepositoryMemoryImpl<Long, User> implements UserRepository {
+public class UserMemoryImpl extends RepositoryMemoryImpl<Long, User> implements UserRepository  {
     public UserMemoryImpl(){
 
     }

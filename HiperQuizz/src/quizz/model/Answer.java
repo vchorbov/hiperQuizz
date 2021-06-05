@@ -1,6 +1,8 @@
 package quizz.model;
 
-public class Answer extends AbstractEntity<Long, Answer> {
+import java.io.Serializable;
+
+public class Answer extends AbstractEntity<Long, Answer> implements Serializable {
 
     private Question question; // - reference to the Question to which the Answer belongs;
     private String text; // - string 2 - 150 characters long, supporting Markdown syntax;

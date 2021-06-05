@@ -1,5 +1,6 @@
 package quizz.dao.impl;
 
+import quizz.dao.KeyGenerator;
 import quizz.dao.QuizRepository;
 import quizz.model.Answer;
 import quizz.model.Question;
@@ -10,6 +11,13 @@ import java.util.Optional;
 
 
 public class QuizMemoryImpl extends RepositoryMemoryImpl<Long, Quiz> implements QuizRepository{
+    public QuizMemoryImpl() {
+    }
+
+    public QuizMemoryImpl(KeyGenerator<Long> keyGenerator) {
+        super(keyGenerator);
+    }
+
     @Override
     public Optional<List<Question>> findAllQuestions() {
         List<Question> questions = new ArrayList<>();

@@ -1,8 +1,9 @@
 package quizz.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Quiz extends AbstractEntity<Long, Quiz> {
+public class Quiz extends AbstractEntity<Long, Quiz> implements Serializable {
 
     private String title; // 2 to 80 characters long;
     private User author; // the User that created the Quiz;
@@ -104,9 +105,9 @@ public class Quiz extends AbstractEntity<Long, Quiz> {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Quiz{");
         sb.append("title='").append(title).append('\'');
-        sb.append(", author=").append(author);
+        sb.append(", author=").append(author.getUsername());
         sb.append(", description='").append(description).append('\'');
-        sb.append(", questions=").append(questions);
+        sb.append(", questions=").append(questions.get(0));
         sb.append(", expectedDuration=").append(expectedDuration);
         sb.append(", picture='").append(picture).append('\'');
         sb.append(", tags='").append(tags).append('\'');

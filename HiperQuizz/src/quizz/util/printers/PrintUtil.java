@@ -1,4 +1,6 @@
-package quizz.util;
+package quizz.util.printers;
+
+import quizz.util.Alignment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

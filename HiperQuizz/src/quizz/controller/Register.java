@@ -26,7 +26,7 @@ static LongKeyGenerator lkg = new LongKeyGenerator();
     };
 
     public static final Administrator[] SAMPLE_ADMINS = {
-            new Administrator(lkg.getNextId(),"adam", "adam.a@gmail.com", "xxxx", Gender.MALE)
+            new Administrator(lkg.getNextId(),"adam", "adam.a@gmail.com", "xxxx", Gender.MALE,Role.ADMIN)
     };
 
     public static final Question[] SAMPLE_QUESTIONS = {

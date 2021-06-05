@@ -1,9 +1,10 @@
 package quizz.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Player<K,V> extends User {
+public class Player<K,V> extends User implements Serializable {
     private List<QuizResult> results;
     private int overallScore;
 
@@ -21,6 +22,10 @@ public class Player<K,V> extends User {
     }
     public Player(Long id, List<QuizResult> results) {
         super(id);
+        this.results = results;
+    }
+    public Player( String username, String email, String password, Gender gender) {
+        super(username, email, password, gender);
         this.results = results;
     }
 

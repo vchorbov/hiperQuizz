@@ -18,8 +18,9 @@ public class Administrator extends User {
     }
 
     public Administrator(Long id, String username, String email, String password,
-                         Gender gender) {
-        super(id, username, email, password, gender);
+                         Gender gender, Role role) {
+        super(id, username, email, password, gender, role);
+
     }
 
     public Administrator(Long id, String username, String email, String password,

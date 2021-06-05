@@ -1,16 +1,18 @@
 package quizz.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Question extends AbstractEntity<Long, Question>{
+public class Question extends AbstractEntity<Long, Question> implements Serializable {
 
-    private Quiz quiz; // - reference to the Quiz the Question belongs;
-    private String text; // - string 10 - 300 characters long, supporting Markdown syntax;
-    private String picture; // (optional) - if the Question includes picture, valid URL;
-    private List <Answer> answers; // - list of Answer entities for the Question;
+    private Quiz quiz;
+    private String text;
+    private String picture;
+    private List <Answer> answers;
 
     public Question() {
     }
+
     public Question(String text) {
         this.text = text;
     }

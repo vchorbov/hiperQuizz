@@ -1,122 +1,165 @@
 package quizz;
 
+import quizz.commands.LoadEntitiesCommand;
+import quizz.commands.SaveEntitiesCommand;
 import quizz.controller.Register;
+import quizz.dao.QuizRepository;
+import quizz.dao.QuizResultRepository;
+import quizz.dao.UserRepository;
+import quizz.dao.impl.LongKeyGenerator;
+import quizz.dao.impl.QuizMemoryImpl;
+import quizz.dao.impl.QuizResultMemoryImpl;
+import quizz.dao.impl.UserMemoryImpl;
+import quizz.exception.EntityAlreadyExistsException;
 import quizz.model.*;
-import quizz.util.InputUtil;
+import quizz.util.creators.QuizCreator;
+import quizz.util.printers.QuizTablePrinter;
+import quizz.util.printers.UsersTablePrinter;
+import quizz.util.creators.UserCreator;
+import quizz.validations.*;
+import quizz.views.MainMenuView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final String MAIN_MENU = "           M A I N    M E N U";
-    private static final String delimeter = "=========================================";
-    private static final List<String> menu = new ArrayList<>(List.of(
-            "<0> EXIT from this program ",
-            "<1> List all players ",
-            "<2> List all admins",
-            "<3> List all questions",
-            "<4> List all answers",
-            "<5> List all quizzes",
-            "<6> Add new player",
-            "<7> Add new admin",
-            "<8> Add new question"
-    ));
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Register register = new Register();
+        InputValidator inValidator = new InputValidator();
+
+        //take it out of here
+        UserMemoryImpl playerRepo = new UserMemoryImpl(new LongKeyGenerator());
+        UserRepository adminRepo = new UserMemoryImpl(new LongKeyGenerator());
+        QuizRepository quizRepo = new QuizMemoryImpl(new LongKeyGenerator());
+        QuizResultRepository quizResultRepo = new QuizResultMemoryImpl(new LongKeyGenerator());
+
+        //fill the repo with the sample data
+        Arrays.stream(Register.SAMPLE_PLAYERS).sequential().forEach(player -> {
+            try {
+                playerRepo.create(player);
+            } catch (EntityAlreadyExistsException e) {
+                e.printStackTrace();
+            }
+        });
+        Arrays.stream(Register.SAMPLE_ADMINS).sequential().forEach(player -> {
+            try {
+                adminRepo.create(player);
+            } catch (EntityAlreadyExistsException e) {
+                e.printStackTrace();
+            }
+        });
+        Arrays.stream(Register.SAMPLE_QUIZZES).sequential().forEach(quiz -> {
+            try {
+                quizRepo.create(quiz);
+            } catch (EntityAlreadyExistsException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // temporary User for the creation of new Quizzes
+        Player tempPlayer = new Player(122L,"spy", "spy@gmail.com", "????", Gender.MALE);
 
         // SAMPLE_DATA
-        List<User> players = new ArrayList<>(List.of(register.SAMPLE_PLAYERS));
-        List<User> admins = new ArrayList<>(List.of(register.SAMPLE_ADMINS));
-        List<Question> questions = new ArrayList<>(List.of(register.SAMPLE_QUESTIONS));
-        List<Answer> answers = new ArrayList<>(List.of(register.SAMPLE_ANSWERS));
-        List<Quiz> quizzes = new ArrayList<>(List.of(register.SAMPLE_QUIZZES));
+        List<User> players = new ArrayList<>(List.of(Register.SAMPLE_PLAYERS));
+        List<User> admins = new ArrayList<>(List.of(Register.SAMPLE_ADMINS));
+        List<Question> questions = new ArrayList<>(List.of(Register.SAMPLE_QUESTIONS));
+        List<Answer> answers = new ArrayList<>(List.of(Register.SAMPLE_ANSWERS));
+        List<Quiz> quizzes = new ArrayList<>(List.of(Register.SAMPLE_QUIZZES));
 
 
-        //SAMPLE_DATA
-        printMenu();
+        MainMenuView.printMainMenu();
         String input = scanner.nextLine();
 
         // Insert a valid command
-        while (!isANumber(input) || !isInRange(input)) {
-            System.out.println("Please inset a valid number in the range from 0 to " + (menu.size()-1));
-            input = scanner.nextLine();
-        }
-        int command = Integer.parseInt(input);
 
-        while (command != 0){
-            switch (command){
-                case 1:
-                   players.stream().forEach(System.out::println);
-                    break;
-                case 2:
-                    admins.stream().forEach(System.out::println);
-                    break;
-                case 3:
-                    questions.stream().forEach(System.out::println);
-                    break;
-                case 4:
-                    answers.stream().forEach(System.out::println);
-                    break;
-                case 5:
-                    quizzes.stream().forEach(System.out::println);
-                    break;
-                case 6:
-                    User playerToBeCreated = InputUtil.createNewPlayer(scanner);
-                    if(playerToBeCreated != null) players.add(playerToBeCreated);
-                    break;
-                case 7:
-                    User adminToBeCreated = InputUtil.createNewAdmin(scanner);
-                    if(adminToBeCreated != null) admins.add(adminToBeCreated);
-                    break;
-                case 8:
-                    Question questionToBeCreated = InputUtil.createNewQuestion(scanner);
-                    if(questionToBeCreated != null) questions.add(questionToBeCreated);
-                    break;
-                case 9:
-                    // Answer answerToBeCreated = InputUtil.createNewAnswer();
-                    //if(answerToBeCreated != null) answers.add(answerToBeCreated);
-                default:
-                    System.out.println("Please inset a valid number in the range from 0 to " + (menu.size()-1));
+            while(!inValidator.isANumber(input) || !inValidator.isInRange(input, 8)) {
+                System.out.println("Please inset a valid number in the range from 0 to " + (8));
+                input = scanner.nextLine();
             }
-            printMenu();
-            input = scanner.nextLine();
-            //validate the input
-            command = Integer.parseInt(input);
+            int command = Integer.parseInt(input);
 
-        }
+            while (command != 0) {
+                switch (command) {
+                    case 1: //list all players
+                        UsersTablePrinter.printTableForUsers(playerRepo);
+                        break;
+                    case 2: //list all admins
+                        UsersTablePrinter.printTableForUsers(adminRepo);
+                        break;
+                    case 3: // list all quizzes
+                        QuizTablePrinter.printTableForUsers(quizRepo);
+                        break;
+                    case 4: // list dashboard
+                        break;
+                    case 5: // add new player
+                        User playerToBeCreated = UserCreator.createNewPlayer(scanner);
+                        if (playerToBeCreated != null) {
+                            try {
+                                playerRepo.create(playerToBeCreated);
+                            } catch (EntityAlreadyExistsException e) {
+                                System.err.println("A player with this credentials already exists.");
+                            }
+                        }
+                        break;
+                    case 6: // add new admin
+                        User adminToBeCreated = UserCreator.createNewAdmin(scanner);
+                        if (adminToBeCreated != null) {
+                            try {
+                                adminRepo.create(adminToBeCreated);
+                            } catch (EntityAlreadyExistsException e) {
+                                System.err.println("An admin with this credentials already exists.");
+                            }
+                        }
+                        break;
+                    case 7: // add new quiz
+                        Quiz quizToBeCreated = QuizCreator.createNewQuiz(scanner, tempPlayer);
+                        try {
+                            quizRepo.create(quizToBeCreated);
+                        } catch (EntityAlreadyExistsException e) {
+                            System.err.println("A quiz on the same subject already exists.");
+                        }
+                        break;
+                    case 8:
+                        break;
+                    case 9:
 
+                    default:
+                        System.out.println("Please inset a valid number in the range from 0 to " + (8));
+                }
+                MainMenuView.printMainMenu();
+                input = scanner.nextLine();
+                //validate the input
+                command = Integer.parseInt(input);
 
-    }
-    public static void printMenu(){
-        System.out.println();
-        System.out.println(MAIN_MENU);
-        System.out.println(delimeter);
-        menu.stream().forEach(System.out::println);
-        System.out.println();
-
-    }
-    static private boolean isANumber(String in){
-        boolean aNumber = false;
+            }
+        // Testing serialization/deserialization to /from file
         try {
-            Integer.parseInt(in);
-        }catch (NumberFormatException ex){
-            return false;
+            SaveEntitiesCommand saveCommand = new SaveEntitiesCommand(new FileOutputStream("quizzes.db"),
+                    playerRepo, quizRepo
+                    , quizResultRepo);
+            System.out.println(saveCommand.execute());
+            playerRepo.drop();
+            quizRepo.drop();
+            quizResultRepo.drop();
+
+            LoadEntitiesCommand loadCommand = new LoadEntitiesCommand(new FileInputStream("quizzes.db"),
+                    playerRepo, quizRepo, quizResultRepo);
+            //NullPointerEx
+            System.out.println(loadCommand.execute());
+
+
+            UsersTablePrinter.printTableForUsers(playerRepo);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return true;
+
+        }
+
 
     }
-    static private boolean isInRange(String in){
-        boolean valid = false;
-        int num = Integer.parseInt(in);
-        if(num>=0 && num < menu.size()){
-            return true;
-        }
-        return false;
-    }
 
-
-
-}

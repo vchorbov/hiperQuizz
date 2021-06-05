@@ -6,18 +6,18 @@ import java.util.List;
 
 public class User extends AbstractEntity<Long, User>{
 
-    private String username; // 2 to 15 characters long - word characters only, unique within the system, cannot be changed;
-    private String email; //should be valid email address, unique within the system, cannot be changed;
-    private String password; // - string 8 to 15 characters long, at least one digit, one capital letter, and one sign different than letter or digit, NOT sent back to the User clients for security reasons;
-    private Gender gender; //MALE / FEMALE enumeration;
-    private Role role = Role.PLAYER; //PLAYER or ADMIN enumeration, PLAYER by default, editable only by Administrators;
-    private String picture; // of the user (optional) - valid URL, if missing should ne substituted with an avatar according to the gender;
-    private String description; // (optional) - string 20 - 250 characters long;
-    private String metadata; // (optional) - string up to 512 characters long, visible and editable only by Administrators;
-    private boolean status = true;// boolean - validity status of the user account;
-    private List<Quiz> quizzes; //list of all Quizzes created by the current User;
-    LongKeyGenerator lkg = new LongKeyGenerator();
-    Long idGenerated =  lkg.getNextId();
+    private String username;
+    private String email;
+    private String password;
+    private Gender gender;
+    private Role role = Role.PLAYER;
+    private String picture;
+    private String description;
+    private String metadata;
+    private boolean status = true;
+    private List<Quiz> quizzes;
+
+
 
     public User() {
     }
@@ -26,12 +26,30 @@ public class User extends AbstractEntity<Long, User>{
         super(id);
     }
 
+    public User( String username, String email, String password, Gender gender) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
+
+    }
+
     public User(Long id, String username, String email, String password, Gender gender) {
         super(id);
         this.username = username;
         this.email = email;
         this.password = password;
         this.gender = gender;
+
+    }
+
+    public User(Long id, String username, String email, String password, Gender gender, Role role) {
+        super(id);
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
+        this.role = role;
     }
 
     public User( String username, String email, String password, Gender gender, List<Quiz> quizzes) {

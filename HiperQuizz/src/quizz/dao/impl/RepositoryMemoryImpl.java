@@ -5,10 +5,8 @@ import quizz.dao.Repository;
 import quizz.exception.EntityAlreadyExistsException;
 import quizz.exception.EntityNotFoundException;
 import quizz.model.Identifiable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RepositoryMemoryImpl<K, V extends Identifiable<K>> implements Repository<K, V> {
@@ -49,6 +47,21 @@ public class RepositoryMemoryImpl<K, V extends Identifiable<K>> implements Repos
     }
 
     @Override
+    public int createBatch(Collection<V> entityCollection) throws EntityAlreadyExistsException {
+        int n = 0;
+        if(entityCollection.isEmpty()) return n;
+        for(V entity: entityCollection) {
+            if (entities.putIfAbsent(entity.getId(), entity) != null) {
+                throw new EntityAlreadyExistsException(
+                        String.format("Entity with ID='%s' already exists.", entity.getId()));
+            } else {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    @Override
     public V update(V entity) throws EntityNotFoundException {
         Optional<V> old = findById(entity.getId());
         if(old.isEmpty()) {
@@ -77,5 +90,10 @@ public class RepositoryMemoryImpl<K, V extends Identifiable<K>> implements Repos
     @Override
     public long count() {
         return entities.size();
+    }
+
+    @Override
+    public void drop() {
+        entities.clear();
     }
 }

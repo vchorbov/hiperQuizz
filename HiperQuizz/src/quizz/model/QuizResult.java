@@ -1,6 +1,8 @@
 package quizz.model;
 
-public class QuizResult extends AbstractEntity<Long, QuizResult>{
+import java.io.Serializable;
+
+public class QuizResult extends AbstractEntity<Long, QuizResult> implements Serializable {
     private User player; // - the reference to the User (Player) taking the 'Quiz;
     private Quiz quiz; //- reference to the Quiz taken;
     private int score; // - integer number (sum of Answer scores for all answered questions);
