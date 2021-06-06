@@ -1,4 +1,4 @@
-package quizz.views;
+package quizz.views.loggedInMainMenu;
 
 public enum MenuCommand {
 	NONE,

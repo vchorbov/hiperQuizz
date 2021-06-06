@@ -5,6 +5,7 @@ import quizz.dao.Repository;
 import quizz.exception.EntityAlreadyExistsException;
 import quizz.exception.EntityNotFoundException;
 import quizz.model.Identifiable;
+import quizz.model.User;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +30,8 @@ public class RepositoryMemoryImpl<K, V extends Identifiable<K>> implements Repos
     public Optional<V> findById(K id) {
         return Optional.ofNullable(entities.get(id));
     }
+
+
 
     @Override
     public V create(V entity) throws EntityAlreadyExistsException {

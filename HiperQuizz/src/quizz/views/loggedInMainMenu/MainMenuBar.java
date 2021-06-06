@@ -1,9 +1,9 @@
-package quizz.views;
+package quizz.views.loggedInMainMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainMenuView {
+public class MainMenuBar {
     private static final String MAIN_MENU = "           M A I N    M E N U";
     private static final String delimeter = "=========================================";
     private static final List<String> menu = new ArrayList<>(List.of(
@@ -24,11 +24,12 @@ public class MainMenuView {
 
     ));
     public static void printMainMenu(){
-            System.out.println();
-            System.out.println(MAIN_MENU);
-            System.out.println(delimeter);
-            menu.stream().forEach(System.out::println);
-            System.out.println();
+        System.out.println();
+        System.out.println(MAIN_MENU);
+        System.out.println(delimeter);
+        menu.stream().forEach(System.out::println);
+        System.out.println(delimeter);
+        System.out.println();
 
     }
 }

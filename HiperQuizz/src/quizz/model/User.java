@@ -115,7 +115,7 @@ public class User extends AbstractEntity<Long, User>{
     }
 
     // private for security reasons
-    private  String getPassword() {
+    public String getPassword() {
         return password;
     }
 

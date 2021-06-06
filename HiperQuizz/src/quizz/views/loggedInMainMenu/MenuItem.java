@@ -1,4 +1,4 @@
-package quizz.views;
+package quizz.views.loggedInMainMenu;
 
 public class MenuItem {
 	private String label = "";

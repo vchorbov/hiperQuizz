@@ -1,4 +1,4 @@
-package quizz.views;
+package quizz.views.loggedInMainMenu;
 
 import quizz.controller.Register;
 

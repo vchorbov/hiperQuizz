@@ -2,6 +2,7 @@ package quizz.dao;
 import quizz.exception.EntityAlreadyExistsException;
 import quizz.exception.EntityNotFoundException;
 import quizz.model.Identifiable;
+import quizz.model.User;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +23,6 @@ public interface Repository<K, V extends Identifiable<K>> {
     V update(V entity) throws EntityNotFoundException;
 
     V deleteById(K id) throws EntityNotFoundException;
-
     long count();
 
     void drop();
