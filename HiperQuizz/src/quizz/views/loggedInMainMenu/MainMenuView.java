@@ -8,10 +8,13 @@ import quizz.model.Quiz;
 import quizz.model.User;
 import quizz.util.creators.QuizCreator;
 import quizz.util.creators.UserCreator;
+import quizz.util.printers.DashboardPrinter;
 import quizz.util.printers.QuizTablePrinter;
 import quizz.util.printers.UsersTablePrinter;
 import quizz.validations.InputValidator;
 
+import java.sql.SQLOutput;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MainMenuView {
@@ -19,7 +22,7 @@ public class MainMenuView {
                                       UserRepository playerRepo,
                                       UserRepository adminRepo,
                                       QuizRepository quizRepo,
-                                      User tempPlayer
+                                      Player tempPlayer
                                           ){
         InputValidator inValidator = new InputValidator();
         MainMenuBar.printMainMenu();
@@ -27,8 +30,8 @@ public class MainMenuView {
 
         // Insert a valid command
 
-        while(!inValidator.isANumber(input) || !inValidator.isInRange(input, 8)) {
-            System.out.println("Please inset a valid number in the range from 0 to " + (8));
+        while(!inValidator.isANumber(input) || !inValidator.isInRange(input, 6)) {
+            System.out.println("Please inset a valid number in the range from 0 to " + (6));
             input = scanner.nextLine();
         }
         int command = Integer.parseInt(input);
@@ -38,15 +41,10 @@ public class MainMenuView {
                 case 1: //list all players
                     UsersTablePrinter.printTableForUsers(playerRepo);
                     break;
-                case 2: //list all admins
-                    UsersTablePrinter.printTableForUsers(adminRepo);
-                    break;
-                case 3: // list all quizzes
+                case 2: // list all quizzes
                     QuizTablePrinter.printTableForUsers(quizRepo);
                     break;
-                case 4: // list dashboard
-                    break;
-                case 5: // add new player
+                case 3: // add new player
                     User playerToBeCreated = UserCreator.createNewPlayer(scanner);
                     if (playerToBeCreated != null) {
                         try {
@@ -56,17 +54,7 @@ public class MainMenuView {
                         }
                     }
                     break;
-                case 6: // add new admin
-                    User adminToBeCreated = UserCreator.createNewAdmin(scanner);
-                    if (adminToBeCreated != null) {
-                        try {
-                            adminRepo.create(adminToBeCreated);
-                        } catch (EntityAlreadyExistsException e) {
-                            System.err.println("An admin with this credentials already exists.");
-                        }
-                    }
-                    break;
-                case 7: // add new quiz
+                case 4: // add new quiz
                     Quiz quizToBeCreated = QuizCreator.createNewQuiz(scanner, tempPlayer);
                     try {
                         quizRepo.create(quizToBeCreated);
@@ -74,12 +62,40 @@ public class MainMenuView {
                         System.err.println("A quiz on the same subject already exists.");
                     }
                     break;
-                case 8:
+                case 5: // participate in a quiz
+                    // ! ! !Happy path only! ! !
+                    QuizTablePrinter.printTableForUsers(quizRepo);
+                    System.out.println("These are all the quizzes to choose from. Select one by it's id.");
+                    input = scanner.nextLine();
+                    Long quizId = Long.parseLong(input);
+                    Quiz quizToPlay = quizRepo.findById(quizId).orElse(null);
+                    if(quizToPlay == null){
+                        System.out.println("Invalid id");
+                    }else{
+                        String textQ = quizToPlay.getQuestions().get(0).getText();
+                        String AnswerToQ = quizToPlay.getQuestions().get(0).getAnswers().get(0).getText();
+                        System.out.println(textQ);
+                        System.out.println("Type your answer here:");
+                        input = scanner.nextLine();
+                        if(input.equals(AnswerToQ)){
+                            tempPlayer.setOverallScore(tempPlayer.getOverallScore()
+                                    + quizToPlay
+                                    .getQuestions()
+                                    .get(0)
+                                    .getAnswers()
+                                    .get(0)
+                                    .getScore());
+                            System.out.println("Congrats! That was correct!");
+                        }else{
+                            System.out.println("Sorry! Better Luck next time!");
+                        }
+                    }
                     break;
-                case 9:
-
+                case 6: // list dashboard
+                    DashboardPrinter.printTableForUsers(playerRepo);
+                    break;
                 default:
-                    System.out.println("Please inset a valid number in the range from 0 to " + (8));
+                    System.out.println("Please inset a valid number in the range from 0 to " + (6));
             }
             MainMenuBar.printMainMenu();
             input = scanner.nextLine();

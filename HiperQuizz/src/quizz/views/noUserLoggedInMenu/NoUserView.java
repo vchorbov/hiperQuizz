@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class NoUserView {
 
-    public static User exposeMainMenu(Scanner scanner, UserRepository userRepository) {
+    public static User exposeLoginMenu(Scanner scanner, UserRepository userRepository) {
         LoginMenuBar.printLoginMenu();
         String input = scanner.nextLine();
         User userForThisSession = new User();
@@ -49,7 +49,7 @@ public class NoUserView {
 
                 }
                return null;
-            case 2: //create new account
+            case 2: //create new account(Register)
 
                 // TODO: Implement a logic for the registration of new user -> reuse the existing methods from package quizz.util.creators;
                 break;

@@ -6,7 +6,8 @@ import java.util.Map;
 
 public class Player<K,V> extends User implements Serializable {
     private List<QuizResult> results;
-    private int overallScore;
+    private int overallScore = 0;
+    private Rank rank;
 
 
     public Player() {
@@ -66,12 +67,27 @@ public class Player<K,V> extends User implements Serializable {
         this.results = results;
     }
 
-    public int getOverallScore() {
-         return  results.stream()
-                 .map(quizResult -> quizResult.getScore())
-                 .reduce(0,(scoreSum, score) -> scoreSum + score);
+    public void setOverallScore(int overallScore) {
+        this.overallScore = overallScore;
     }
 
+    public int getOverallScore() {
+        return this.overallScore;
+
+    }
+
+    public Rank getRank() {
+      if(overallScore<=100){
+          rank = Rank.BRONZE;
+      }else if(overallScore>100 && overallScore<=500){
+          rank = Rank.SILVER;
+      }else if(overallScore>500 && overallScore<=1000){
+          rank = Rank.GOLD;
+      }else if(overallScore>1000){
+          rank = Rank.PLATINUM;
+      }
+      return rank;
+    }
 
     @Override
     public String toString() {

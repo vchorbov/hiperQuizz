@@ -24,7 +24,7 @@ public class UsersTablePrinter {
 
     public static void printTableForUsers(UserRepository repository){
         UserRepository userRepo = repository;
-        String usersReport = PrintUtil.formatTable(userColumns, userRepo.findAll(), "Products List:");
+        String usersReport = PrintUtil.formatTable(userColumns, userRepo.findAll(), "Users List:");
         System.out.println(usersReport);
     }
 

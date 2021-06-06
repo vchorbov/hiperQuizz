@@ -26,41 +26,36 @@ public class Main {
         UserRepository adminRepo = new UserMemoryImpl(new LongKeyGenerator());
         QuizRepository quizRepo = new QuizMemoryImpl(new LongKeyGenerator());
         QuizResultRepository quizResultRepo = new QuizResultMemoryImpl(new LongKeyGenerator());
-      //  User loggedInUser =  new Player("spy", "spy@gmail.com", "????", Gender.MALE);
-
-
+      // User loggedInUser =  new Player("spy", "spy@gmail.com", "????", Gender.MALE);
 
         //retrieve data form file
         LoadEntitiesCommand loadCommand = null;
         try {
-            loadCommand = new LoadEntitiesCommand(new FileInputStream("quizzes1.db"),
+            loadCommand = new LoadEntitiesCommand(new FileInputStream("quizzes.db"),
                     playerRepo, quizRepo, quizResultRepo);
             System.out.println(loadCommand.execute());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
+        // for testing purposes here♥
         playerRepo.findAll().forEach(System.out::println);
 
         // User of the session
         User loggedInUser = new Player();
 
-
         //Menu For Users yet to log in
         do{
-            loggedInUser = NoUserView.exposeMainMenu(scanner, playerRepo);
+            loggedInUser = NoUserView.exposeLoginMenu(scanner, playerRepo);
         }while(loggedInUser==null || loggedInUser.getUsername().isBlank());
-
 
 
         //Menu For Logged Users
         MainMenuView.exposeMainMenu(scanner, playerRepo, adminRepo, quizRepo, (Player) loggedInUser);
 
-
-
         // Save the created entities in the flat db and clean locally
         try {
-            SaveEntitiesCommand saveCommand = new SaveEntitiesCommand(new FileOutputStream("quizzes1.db"),
+            SaveEntitiesCommand saveCommand = new SaveEntitiesCommand(new FileOutputStream("quizzes.db"),
                     playerRepo, quizRepo
                     , quizResultRepo);
             System.out.println(saveCommand.execute());
@@ -72,7 +67,5 @@ public class Main {
         }
 
         }
-
-
     }
 

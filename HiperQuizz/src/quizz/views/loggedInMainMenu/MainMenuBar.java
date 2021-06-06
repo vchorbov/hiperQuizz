@@ -9,12 +9,11 @@ public class MainMenuBar {
     private static final List<String> menu = new ArrayList<>(List.of(
             "<0> EXIT from this program ",
             "<1> List all players ",
-            "<2> List all admins",
-            "<3> List all quizzes",
-            "<4> List dashboard",
-            "<5> Add new player",
-            "<6> Add new admin",
-            "<7> Add new quiz"
+            "<2> List all quizzes",
+            "<3> Add new player",
+            "<4> Add new quiz",
+            "<5> Participate in a quiz",
+            "<6> List dashboard"
             //"<9> Update player",
             //"<10> Update quiz",
             //"<11> Delete player",
