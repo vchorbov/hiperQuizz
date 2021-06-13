@@ -14,7 +14,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
 class UserMemoryImplTest {
     private static final List<User> SAMPLE_USERS = List.of(
             new Player("spy", "spy@gmail.com", "????", Gender.MALE),
@@ -216,7 +215,7 @@ class UserMemoryImplTest {
             try {
                 userRepo.create(user);
             } catch (EntityAlreadyExistsException e) {
-                log.error("Error adding products to repository", e);
+               // log.error("Error adding products to repository", e);
             }
         });
     }

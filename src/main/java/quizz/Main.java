@@ -39,7 +39,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        // for testing purposes here♥
+        // for testing purposes here ♥
         playerRepo.findAll().forEach(System.out::println);
 
         // User of the session
