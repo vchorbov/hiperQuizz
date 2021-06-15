@@ -1,13 +1,22 @@
 package quizz.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 public class Question extends AbstractEntity<Long, Question> implements Serializable {
 
+    //TODO one-to-one
     private Quiz quiz;
+    @NotNull @Size(min=10, max=300)
+    @Column(nullable = false, length = 300)
     private String text;
     private String picture;
+    //TODO one-to-one
     private List <Answer> answers;
 
     public Question() {
