@@ -1,5 +1,8 @@
 package academy.hiperQuiz.quizz.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -8,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name="questions")
 public class Question extends AbstractEntity<Long, Question> {
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="quiz_id", referencedColumnName = "id")
     private Quiz quiz;
@@ -16,6 +20,7 @@ public class Question extends AbstractEntity<Long, Question> {
     private String text;
     private String picture;
     @Transient
+    @JsonManagedReference
     @OneToMany(mappedBy = "question")
     private List <Answer> answers;
 

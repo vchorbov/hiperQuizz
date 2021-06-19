@@ -73,6 +73,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public long getCount() {
+
         return quizRepo.count();
     }
 }

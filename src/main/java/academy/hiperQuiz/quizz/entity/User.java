@@ -1,5 +1,7 @@
 package academy.hiperQuiz.quizz.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -42,6 +44,7 @@ public class User extends AbstractEntity<Long, User>{
     private String metadata;
     private boolean status = true;
     //@Transient
+
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     private List<Quiz> quizzes;
 
@@ -206,6 +209,7 @@ public class User extends AbstractEntity<Long, User>{
         this.status = status;
     }
 
+    @JsonManagedReference
     public List<Quiz> getQuizzes() {
         return quizzes;
     }

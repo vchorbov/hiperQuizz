@@ -9,6 +9,7 @@ import academy.hiperQuiz.quizz.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Repository;
@@ -40,6 +41,9 @@ public class UserMemoryJPAImpl implements UserRepository {
 
     @Autowired
     private TransactionTemplate template;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     public UserMemoryJPAImpl() {
     }

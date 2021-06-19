@@ -1,5 +1,7 @@
 package academy.hiperQuiz.quizz.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -7,6 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name="answers")
 public class Answer extends AbstractEntity<Long, Answer> {
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="question_id", referencedColumnName = "id")
     private Question question;
